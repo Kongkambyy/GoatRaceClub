@@ -92,7 +92,6 @@ public class MedlemRepository implements IMedlemRepository {
                 throw new SQLException("Opdatering af medlem fejlet");
             }
 
-            // Opdater alle kæledyr hvis nødvendigt
             if (kæledyrRepository != null) {
                 for (Kæledyr kæledyr : medlem.getKæledyr()) {
                     if (kæledyr.getOwnerId() != medlem.getId().intValue()) {

@@ -1,4 +1,4 @@
-package com.example.goatraceclub.utils;
+package utils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -46,11 +46,6 @@ public class LoggerUtility {
         System.err.println(logMessage); // Vis fejl i konsollen med rød tekst
     }
 
-    /**
-     * Logger en fejl med exception
-     * @param message Fejlbesked
-     * @param e Exception der blev kastet
-     */
     public static void logError(String message, Throwable e) {
         String exceptionDetails = e.getMessage() + "\n";
         for (StackTraceElement element : e.getStackTrace()) {
