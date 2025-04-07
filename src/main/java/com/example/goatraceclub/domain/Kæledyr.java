@@ -63,6 +63,6 @@ public class Kæledyr {
     }
 
     public void setBirthday(Date birthday){
-        this.birthday = birthday;
+        this.birthday = new Date();
     }
 }

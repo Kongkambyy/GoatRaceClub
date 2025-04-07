@@ -1,8 +1,6 @@
-﻿package com.example.goatraceclub.infrastructure.repositories;
+﻿package com.example.goatraceclub.infrastructure.implementations;
 
 import com.example.goatraceclub.domain.Kæledyr;
-import com.example.goatraceclub.domain.Køn;
-import com.example.goatraceclub.domain.Medlem;
 import com.example.goatraceclub.infrastructure.interfaces.IKæledyrRepository;
 import com.example.goatraceclub.infrastructure.interfaces.IMedlemRepository;
 
@@ -11,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implementation af IKæledyrRepository der bruger JDBC til databaseadgang
- */
 public class KæledyrRepository implements IKæledyrRepository {
 
     private final Connection connection;
@@ -37,42 +32,29 @@ public class KæledyrRepository implements IKæledyrRepository {
         String sql = "INSERT INTO goats (ownerId, goatName, race, weight, birthday) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // Sikre at kæledyret har et medlem
-            if (kæledyr.getMedlem() == null || kæledyr.getMedlem().getId() == null) {
-                throw new SQLException("Kæledyr skal have et gyldigt medlem");
-            }
-
-            pstmt.setLong(1, kæledyr.getMedlem().getId());
-            pstmt.setString(2, kæledyr.getNavn());
+            pstmt.setInt(1, kæledyr.getOwnerId());
+            pstmt.setString(2, kæledyr.getGoatName());
             pstmt.setString(3, kæledyr.getRace());
-
-            // Vægt er ikke direkte i vores domænemodel, men er i databasen
-            // Vi kunne opdatere domænemodellen eller håndtere dette her
-            int vægt = 0; // Standard værdi
-            if (kæledyr instanceof Udvidet) {
-                vægt = ((Udvidet) kæledyr).getVægt();
-            }
-            pstmt.setInt(4, vægt);
-
-            pstmt.setDate(5, new java.sql.Date(kæledyr.getFødselsdato().getTime()));
+            pstmt.setInt(4, kæledyr.getWeight());
+            pstmt.setDate(5, new java.sql.Date(kæledyr.birthday().getTime()));
 
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Oprettelse af kæledyr fejlede, ingen rækker påvirket.");
+                throw new SQLException("Kunne ikke oprette ged");
             }
 
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     kæledyr.setId(generatedKeys.getLong(1));
                 } else {
-                    throw new SQLException("Oprettelse af kæledyr fejlede, intet ID opnået.");
+                    throw new SQLException("Oprettelse af ged fejlet");
                 }
             }
 
             return kæledyr;
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke gemme kæledyr", e);
+            throw new RuntimeException("Kunne ikke gemme geden", e);
         }
     }
 
@@ -80,29 +62,22 @@ public class KæledyrRepository implements IKæledyrRepository {
         String sql = "UPDATE goats SET ownerId = ?, goatName = ?, race = ?, weight = ?, birthday = ? WHERE goatId = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setLong(1, kæledyr.getMedlem().getId());
-            pstmt.setString(2, kæledyr.getNavn());
+            pstmt.setInt(1, kæledyr.getOwnerId());
+            pstmt.setString(2, kæledyr.getGoatName());
             pstmt.setString(3, kæledyr.getRace());
-
-            // Håndter vægt ligesom i insert-metoden
-            int vægt = 0;
-            if (kæledyr instanceof Udvidet) {
-                vægt = ((Udvidet) kæledyr).getVægt();
-            }
-            pstmt.setInt(4, vægt);
-
-            pstmt.setDate(5, new java.sql.Date(kæledyr.getFødselsdato().getTime()));
+            pstmt.setInt(4, kæledyr.getWeight());
+            pstmt.setDate(5, new java.sql.Date(kæledyr.birthday().getTime()));
             pstmt.setLong(6, kæledyr.getId());
 
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Opdatering af kæledyr fejlede, ingen rækker påvirket.");
+                throw new SQLException("Opdatering af ged fejlet");
             }
 
             return kæledyr;
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke opdatere kæledyr", e);
+            throw new RuntimeException("Kunne ikke opdatere ged", e);
         }
     }
 
@@ -122,7 +97,7 @@ public class KæledyrRepository implements IKæledyrRepository {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke finde kæledyr med id: " + id, e);
+            throw new RuntimeException("Kunne ikke finde ged med ID: " + id, e);
         }
     }
 
@@ -140,7 +115,7 @@ public class KæledyrRepository implements IKæledyrRepository {
 
             return kæledyr;
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke hente alle kæledyr", e);
+            throw new RuntimeException("Kunne ikke finde alle geder", e);
         }
     }
 
@@ -160,7 +135,7 @@ public class KæledyrRepository implements IKæledyrRepository {
 
             return kæledyr;
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke finde kæledyr for medlem: " + medlemId, e);
+            throw new RuntimeException("Kunne ikke finde medlemmernes geder: " + medlemId, e);
         }
     }
 
@@ -180,13 +155,12 @@ public class KæledyrRepository implements IKæledyrRepository {
 
             return kæledyr;
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke finde kæledyr af race: " + race, e);
+            throw new RuntimeException("Kunne ikke finde gedernes race " + race, e);
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        // Først kontrollér om der er tilmeldinger for dette kæledyr
         String checkSql = "SELECT COUNT(*) FROM registration WHERE petId = ?";
 
         try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
@@ -194,7 +168,6 @@ public class KæledyrRepository implements IKæledyrRepository {
 
             try (ResultSet rs = checkStmt.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
-                    // Der er tilmeldinger - slet dem først
                     String deleteTilmeldingSql = "DELETE FROM registration WHERE petId = ?";
                     try (PreparedStatement deleteRegStmt = connection.prepareStatement(deleteTilmeldingSql)) {
                         deleteRegStmt.setLong(1, id);
@@ -203,7 +176,6 @@ public class KæledyrRepository implements IKæledyrRepository {
                 }
             }
 
-            // Nu kan vi trygt slette kæledyret
             String sql = "DELETE FROM goats WHERE goatId = ?";
 
             try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -211,7 +183,7 @@ public class KæledyrRepository implements IKæledyrRepository {
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke slette kæledyr med id: " + id, e);
+            throw new RuntimeException("kunne ikke slette ged med id: " + id, e);
         }
     }
 
@@ -229,61 +201,19 @@ public class KæledyrRepository implements IKæledyrRepository {
                 return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Kunne ikke kontrollere eksistens af kæledyr med id: " + id, e);
+            throw new RuntimeException("Kunne ikke finde eksisterende geder med ID: " + id, e);
         }
     }
 
-    // Hjælpemetode til at konvertere ResultSet til Kæledyr objekt
     private Kæledyr mapResultSetToKæledyr(ResultSet rs) throws SQLException {
-        Long ownerId = rs.getLong("ownerId");
-        Optional<Medlem> ejer = medlemRepository.findById(ownerId);
-
-        if (ejer.isEmpty()) {
-            throw new SQLException("Kunne ikke finde ejer med id: " + ownerId);
-        }
-
-        // Bemærk: Køn er ikke i databasen, så vi sætter en standard værdi
-        Køn køn = Køn.NEUTRAL; // Standard værdi
-
-        // Opret en udvidet implementering af Kæledyr der også har vægt
-        return new UdvidetKæledyr(
-                rs.getLong("goatId"),
+        Kæledyr kæledyr = new Kæledyr(
+                rs.getInt("ownerId"),
                 rs.getString("goatName"),
                 rs.getString("race"),
-                rs.getDate("birthday"),
-                "Ikke specificeret", // Farve er ikke i databasen
-                "Ikke specificeret", // StamtavleNr er ikke i databasen
-                køn,
-                ejer.get(),
-                rs.getInt("weight") // Gem vægten fra databasen
+                rs.getInt("weight"),
+                rs.getDate("birthday").toString()
         );
-    }
-
-    // Indre klasse til at håndtere ekstra felter fra databasen
-    private class UdvidetKæledyr extends Kæledyr implements Udvidet {
-        private int vægt;
-
-        public UdvidetKæledyr(Long id, String navn, String race, Date fødselsdato,
-                              String farve, String stamtavleNr, Køn køn,
-                              Medlem medlem, int vægt) {
-            super(id, navn, race, fødselsdato, farve, stamtavleNr, køn, medlem);
-            this.vægt = vægt;
-        }
-
-        @Override
-        public int getVægt() {
-            return vægt;
-        }
-
-        @Override
-        public void setVægt(int vægt) {
-            this.vægt = vægt;
-        }
-    }
-
-    // Interface til at håndtere ekstra felter
-    private interface Udvidet {
-        int getVægt();
-        void setVægt(int vægt);
+        kæledyr.setId(rs.getLong("goatId"));
+        return kæledyr;
     }
 }

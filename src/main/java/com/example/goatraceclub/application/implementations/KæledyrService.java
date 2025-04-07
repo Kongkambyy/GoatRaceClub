@@ -2,7 +2,6 @@
 
 import com.example.goatraceclub.infrastructure.interfaces.IKæledyrRepository;
 
-public class KæledyrService implements IKæledyrRepository {
-
+public class KæledyrService {
 
 }

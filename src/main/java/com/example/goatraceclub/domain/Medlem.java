@@ -9,7 +9,7 @@ public class Medlem {
     private Long id;
     private String name;
     private String email;
-    private String Password;
+    private String password;
     private String addresse;
     private String telefon;
     private Date indmeldelsesDato;
@@ -19,24 +19,24 @@ public class Medlem {
     public Medlem(String name, String email, String password, String addresse, String telefon) {
         this.name = name;
         this.email = email;
-        this.Password = password;
+        this.password = password;
         this.addresse = addresse;
         this.telefon = telefon;
         this.indmeldelsesDato = new Date();
         this.rolle = Rolle.MEDLEM;
     }
 
-    public void tilføjKæledur(Kæledyr kæledyr) {
+    public void tilføjKæledyr(Kæledyr kæledyr) {
         if (!this.kæledyr.contains(kæledyr)) {
             this.kæledyr.add(kæledyr);
-            kæledyr.setMedlem(this);
+            kæledyr.setOwnerId(this.id.intValue());
         }
     }
 
     public void fjernKæledyr(Kæledyr kæledyr) {
         if (this.kæledyr.contains(kæledyr)) {
             this.kæledyr.remove(kæledyr);
-            kæledyr.setMedlem(null);
+            kæledyr.setOwnerId(0); // 0 angiver at geden ikke har en ejer
         }
     }
 
@@ -65,11 +65,11 @@ public class Medlem {
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getAddresse() {
@@ -88,7 +88,7 @@ public class Medlem {
         this.telefon = telefon;
     }
 
-    public Date indmeldelsesDato() {
+    public Date getIndmeldelsesDato() {
         return indmeldelsesDato;
     }
 
@@ -96,11 +96,11 @@ public class Medlem {
         this.indmeldelsesDato = indmeldelsesDato;
     }
 
-    public Rolle getRolle(){
+    public Rolle getRolle() {
         return rolle;
     }
 
-    public void setRolle(Rolle rolle){
+    public void setRolle(Rolle rolle) {
         this.rolle = rolle;
     }
 
