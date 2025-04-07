@@ -62,6 +62,7 @@ public class MedlemRepository implements IMedlemRepository {
                             kæledyrRepository.save(kæledyr);
                         }
                     }
+
                 } else {
                     throw new SQLException("Kunne ikke oprette medlem");
                 }
