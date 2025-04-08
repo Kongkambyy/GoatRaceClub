@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mine Geder - Gedeklubben</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Header med navigation -->
+<header>
+  <nav>
+    <div class="logo">
+      <h1>Gedeklubben</h1>
+    </div>
+    <div class="nav-links">
+      <a href="/">Hjem</a>
+      <a href="/member/pets" class="active">Mine Geder</a>
+      <a href="/exhibitions">Udstillinger</a>
+      <div class="auth-links">
+        <a href="/member/profile">Min Profil</a>
+        <a href="/logout">Log ud</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Hovedindhold -->
+<main>
+  <section class="pets-list">
+    <h2>Mine Geder</h2>
+
+    <a href="/member/pets/register" class="btn">Registrer ny ged</a>
+
+    <!-- For now show a message instead of using th:if -->
+    <div class="no-pets">
+      <p>Du har ikke registreret nogen geder endnu.</p>
+      <a href="/member/pets/register" class="btn">Registrer din første ged</a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="copyright">
+    <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+  </div>
+</footer>
+</body>
+</html>

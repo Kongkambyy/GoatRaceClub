@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Profil - Gedeklubben</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Header med navigation -->
+<header>
+    <nav>
+        <div class="logo">
+            <h1>Gedeklubben</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Hjem</a>
+            <a href="/member/pets">Mine Geder</a>
+            <a href="/exhibitions">Udstillinger</a>
+            <div class="auth-links">
+                <a href="/member/profile" class="active">Min Profil</a>
+                <a href="/logout">Log ud</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Hovedindhold -->
+<main>
+    <section class="dashboard">
+        <h2>Velkommen, <span th:text="${memberName}">Navn</span></h2>
+
+        <div class="dashboard-info">
+            <div class="profile-info">
+                <h3>Mine oplysninger</h3>
+                <p><strong>Email:</strong> test@example.com</p>
+                <p><strong>Adresse:</strong> Adressevej 123</p>
+                <p><strong>Telefon:</strong> 12345678</p>
+                <p><strong>Medlem siden:</strong> 01-01-2025</p>
+
+                <a href="/member/edit" class="btn">Rediger profil</a>
+            </div>
+
+            <div class="pet-summary">
+                <h3>Mine geder</h3>
+                <p>Du har registreret 0 geder.</p>
+                <a href="/member/pets" class="btn">Se mine geder</a>
+                <a href="/member/pets/register" class="btn">Registrer ny ged</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="copyright">
+        <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+    </div>
+</footer>
+</body>
+</html>
