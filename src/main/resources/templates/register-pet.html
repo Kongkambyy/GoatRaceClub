@@ -14,8 +14,10 @@
             <h1>Gedeklubben</h1>
         </div>
         <div class="nav-links">
-            <a href="/">Hjem</a>
+            <a href="/member/dashboard">Hjem</a>
             <a href="/member/pets" class="active">Mine Geder</a>
+            <a href="/member/allgoats">Alle Geder</a>
+            <a href="/member/membergoats">Medlemmers Geder</a>
             <a href="/exhibitions">Udstillinger</a>
             <div class="auth-links">
                 <a href="/member/profile">Min Profil</a>
@@ -29,6 +31,11 @@
 <main>
     <section class="register-pet">
         <h2>Registrer Ged</h2>
+
+        <!-- Fejlbesked vises hvis der er en fejl -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
 
         <form action="/member/pets/register" method="POST">
             <div class="form-group">

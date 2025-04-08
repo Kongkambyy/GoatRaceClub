@@ -7,27 +7,61 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container">
-    <h2>Login til Gedeklubben</h2>
-    <form action="/login" method="POST">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+<header>
+    <nav>
+        <div class="logo">
+            <h1>Gedeklubben</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Hjem</a>
+            <div class="auth-links">
+                <a href="/login" class="active">Login</a>
+                <a href="/register">Registrer</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h2>Login til Gedeklubben</h2>
+
+        <!-- Fejlbesked vises hvis der er en fejl -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
         </div>
 
-        <div class="form-group">
-            <label for="password">Kodeord:</label>
-            <input type="password" id="password" name="password" required>
+        <!-- Succesbesked vises hvis der er success parameter -->
+        <div th:if="${param.success}" class="success-message">
+            <p th:text="${param.success}"></p>
         </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn">Log ind</button>
-        </div>
-    </form>
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-    <div class="links">
-        <p>Ikke medlem endnu? <a href="/register">Registrer dig her</a></p>
+            <div class="form-group">
+                <label for="password">Kodeord:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn">Log ind</button>
+            </div>
+        </form>
+
+        <div class="links">
+            <p>Ikke medlem endnu? <a href="/register">Registrer dig her</a></p>
+        </div>
     </div>
-</div>
+</main>
+
+<footer>
+    <div class="copyright">
+        <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+    </div>
+</footer>
 </body>
 </html>

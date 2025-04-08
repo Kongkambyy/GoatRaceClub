@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alle Geder - Gedeklubben</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Header med navigation -->
+<header>
+  <nav>
+    <div class="logo">
+      <h1>Gedeklubben</h1>
+    </div>
+    <div class="nav-links">
+      <a href="/member/dashboard">Hjem</a>
+      <a href="/member/pets">Mine Geder</a>
+      <a href="/member/allgoats" class="active">Alle Geder</a>
+      <a href="/member/membergoats">Medlemmers Geder</a>
+      <a href="/exhibitions">Udstillinger</a>
+      <div class="auth-links">
+        <a href="/member/profile">Min Profil</a>
+        <a href="/logout">Log ud</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Hovedindhold -->
+<main>
+  <section class="all-goats">
+    <h2>Alle Geder i Klubben</h2>
+
+    <!-- Vis geder hvis der er nogen -->
+    <div th:if="${not #lists.isEmpty(goats)}" class="pets-container">
+      <div th:each="goat : ${goats}" class="pet-card">
+        <h3 th:text="${goat.goatName}">Gede Navn</h3>
+        <p><strong>Race:</strong> <span th:text="${goat.race}">Race</span></p>
+        <p><strong>Vægt:</strong> <span th:text="${goat.weight}">0</span> kg</p>
+        <p><strong>Fødselsdag:</strong> <span th:text="${#dates.format(goat.birthday(), 'dd-MM-yyyy')}">01-01-2025</span></p>
+      </div>
+    </div>
+
+    <!-- Vis besked hvis der ikke er nogen geder -->
+    <div th:if="${#lists.isEmpty(goats)}" class="no-pets">
+      <p>Der er ingen geder registreret i systemet endnu.</p>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="copyright">
+    <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+  </div>
+</footer>
+</body>
+</html>

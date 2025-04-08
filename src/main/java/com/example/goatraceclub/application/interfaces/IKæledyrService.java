@@ -3,6 +3,7 @@ package com.example.goatraceclub.application.interfaces;
 import com.example.goatraceclub.domain.Kæledyr;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IKæledyrService {
@@ -16,6 +17,8 @@ public interface IKæledyrService {
     List<Kæledyr> getKæledyrByMedlemId(Long medlemId);
 
     List<Kæledyr> getKæledyrByRace(String race);
+
+    Map<String, List<Kæledyr>> getAlleMedlemmerMedGeder();
 
     Kæledyr opdaterKæledyr(Kæledyr kæledyr);
 

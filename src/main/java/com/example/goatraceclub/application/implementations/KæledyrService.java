@@ -8,7 +8,9 @@ import com.example.goatraceclub.infrastructure.interfaces.IMedlemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -62,6 +64,24 @@ public class KæledyrService implements IKæledyrService {
     @Override
     public List<Kæledyr> getKæledyrByRace(String race) {
         return kæledyrRepository.findByRace(race);
+    }
+
+    @Override
+    public Map<String, List<Kæledyr>> getAlleMedlemmerMedGeder() {
+        Map<String, List<Kæledyr>> medlemmerMedGeder = new HashMap<>();
+
+        // Hent alle medlemmer
+        List<Medlem> medlemmer = medlemRepository.findAll();
+
+        // For hvert medlem, hent deres geder og tilføj til map'et
+        for (Medlem medlem : medlemmer) {
+            List<Kæledyr> geder = kæledyrRepository.findByMedlemId(medlem.getId());
+            if (!geder.isEmpty()) {
+                medlemmerMedGeder.put(medlem.getName(), geder);
+            }
+        }
+
+        return medlemmerMedGeder;
     }
 
     @Override

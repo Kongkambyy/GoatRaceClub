@@ -20,12 +20,11 @@ public class DatabaseConfig {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/goatraceclub";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "root"; // Add your password here if needed
+    private static final String DB_PASSWORD = "root";
 
     @Bean
     public Connection databaseConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-        return connection;
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 
     @Bean
@@ -50,8 +49,11 @@ public class DatabaseConfig {
         return new TilmeldingsRepository(connection, kæledyrRepository, udstillingsRepository);
     }
 
+    // Fix: Changed void to IMedlemRepository to make this a proper @Bean method
     @Bean
-    public void setupRepositoryDependencies(IMedlemRepository medlemRepository, IKæledyrRepository kæledyrRepository) {
+    public IMedlemRepository setupRepositoryDependencies(IMedlemRepository medlemRepository,
+                                                         IKæledyrRepository kæledyrRepository) {
         ((MedlemRepository) medlemRepository).setKæledyrRepository(kæledyrRepository);
+        return medlemRepository; // Return the modified repository
     }
 }

@@ -1,5 +1,7 @@
 package com.example.goatraceclub.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 public class Kæledyr {
 
@@ -10,12 +12,18 @@ public class Kæledyr {
     private int weight;
     private Date birthday;
 
-    public Kæledyr(int ownerId, String goatName, String race, int weight, String birthday){
+    public Kæledyr(int ownerId, String goatName, String race, int weight, String birthdayStr) {
         this.ownerId = ownerId;
         this.goatName = goatName;
         this.race = race;
         this.weight = weight;
-        this.birthday = new Date();
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            this.birthday = format.parse(birthdayStr);
+        } catch (ParseException e) {
+            this.birthday = new Date();
+        }
     }
 
     public Long getId() {

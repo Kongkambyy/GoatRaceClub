@@ -7,47 +7,71 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div class="container">
-    <h2>Bliv medlem af Gedeklubben</h2>
-    <form action="/register" method="POST">
-        <div class="form-group">
-            <label for="name">Navn:</label>
-            <input type="text" id="name" name="name" required>
+<header>
+    <nav>
+        <div class="logo">
+            <h1>Gedeklubben</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/">Hjem</a>
+            <div class="auth-links">
+                <a href="/login">Login</a>
+                <a href="/register" class="active">Registrer</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h2>Bliv medlem af Gedeklubben</h2>
+
+        <!-- Fejlbesked vises hvis der er en fejl -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
         </div>
 
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
+        <form action="/register" method="POST">
+            <div class="form-group">
+                <label for="name">Navn:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
 
-        <div class="form-group">
-            <label for="password">Kodeord:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-        <div class="form-group">
-            <label for="password2">Gentag kodeord:</label>
-            <input type="password" id="password2" name="password2" required>
-        </div>
+            <div class="form-group">
+                <label for="password">Kodeord:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
 
-        <div class="form-group">
-            <label for="address">Adresse:</label>
-            <input type="text" id="address" name="address" required>
-        </div>
+            <div class="form-group">
+                <label for="address">Adresse:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
 
-        <div class="form-group">
-            <label for="telephone">Telefon:</label>
-            <input type="tel" id="telephone" name="telephone" required>
-        </div>
+            <div class="form-group">
+                <label for="telephone">Telefon:</label>
+                <input type="tel" id="telephone" name="telephone" required>
+            </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn">Registrer</button>
-        </div>
-    </form>
+            <div class="form-group">
+                <button type="submit" class="btn">Registrer</button>
+            </div>
+        </form>
 
-    <div class="links">
-        <p>Allerede medlem? <a href="/login">Log ind her</a></p>
+        <div class="links">
+            <p>Allerede medlem? <a href="/login">Log ind her</a></p>
+        </div>
     </div>
-</div>
+</main>
+
+<footer>
+    <div class="copyright">
+        <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+    </div>
+</footer>
 </body>
 </html>

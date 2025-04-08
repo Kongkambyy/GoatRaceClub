@@ -14,8 +14,10 @@
       <h1>Gedeklubben</h1>
     </div>
     <div class="nav-links">
-      <a href="/">Hjem</a>
+      <a href="/member/dashboard">Hjem</a>
       <a href="/member/pets" class="active">Mine Geder</a>
+      <a href="/member/allgoats">Alle Geder</a>
+      <a href="/member/membergoats">Medlemmers Geder</a>
       <a href="/exhibitions">Udstillinger</a>
       <div class="auth-links">
         <a href="/member/profile">Min Profil</a>
@@ -30,12 +32,32 @@
   <section class="pets-list">
     <h2>Mine Geder</h2>
 
+    <!-- Succesbesked vises hvis der er success parameter -->
+    <div th:if="${param.success}" class="success-message">
+      <p th:text="${param.success}"></p>
+    </div>
+
     <a href="/member/pets/register" class="btn">Registrer ny ged</a>
 
-    <!-- For now show a message instead of using th:if -->
-    <div class="no-pets">
+    <!-- Vis geder hvis der er nogen -->
+    <div th:if="${not #lists.isEmpty(pets)}" class="pets-container">
+      <div th:each="pet : ${pets}" class="pet-card">
+        <h3 th:text="${pet.goatName}">Gede Navn</h3>
+        <p><strong>Race:</strong> <span th:text="${pet.race}">Race</span></p>
+        <p><strong>Vægt:</strong> <span th:text="${pet.weight}">0</span> kg</p>
+        <p><strong>Fødselsdag:</strong> <span th:text="${#dates.format(pet.birthday(), 'dd-MM-yyyy')}">01-01-2025</span></p>
+
+        <div class="pet-actions">
+          <a th:href="@{/member/pets/edit/{id}(id=${pet.id})}" class="btn">Rediger</a>
+          <a th:href="@{/member/pets/delete/{id}(id=${pet.id})}" class="btn btn-danger"
+             onclick="return confirm('Er du sikker på, at du vil slette denne ged?')">Slet</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vis besked hvis der ikke er nogen geder -->
+    <div th:if="${#lists.isEmpty(pets)}" class="no-pets">
       <p>Du har ikke registreret nogen geder endnu.</p>
-      <a href="/member/pets/register" class="btn">Registrer din første ged</a>
     </div>
   </section>
 </main>

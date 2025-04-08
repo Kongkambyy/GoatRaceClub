@@ -14,11 +14,13 @@
             <h1>Gedeklubben</h1>
         </div>
         <div class="nav-links">
-            <a href="/">Hjem</a>
+            <a href="/member/dashboard" class="active">Hjem</a>
             <a href="/member/pets">Mine Geder</a>
+            <a href="/member/allgoats">Alle Geder</a>
+            <a href="/member/membergoats">Medlemmers Geder</a>
             <a href="/exhibitions">Udstillinger</a>
             <div class="auth-links">
-                <a href="/member/profile" class="active">Min Profil</a>
+                <a href="/member/profile">Min Profil</a>
                 <a href="/logout">Log ud</a>
             </div>
         </div>
@@ -33,17 +35,17 @@
         <div class="dashboard-info">
             <div class="profile-info">
                 <h3>Mine oplysninger</h3>
-                <p><strong>Email:</strong> test@example.com</p>
-                <p><strong>Adresse:</strong> Adressevej 123</p>
-                <p><strong>Telefon:</strong> 12345678</p>
-                <p><strong>Medlem siden:</strong> 01-01-2025</p>
+                <p><strong>Email:</strong> <span th:text="${memberEmail}">email@example.com</span></p>
+                <p><strong>Adresse:</strong> <span th:text="${memberAddress}">Adressevej 123</span></p>
+                <p><strong>Telefon:</strong> <span th:text="${memberPhone}">12345678</span></p>
+                <p><strong>Medlem siden:</strong> <span th:text="${#dates.format(memberSince, 'dd-MM-yyyy')}">01-01-2025</span></p>
 
                 <a href="/member/edit" class="btn">Rediger profil</a>
             </div>
 
             <div class="pet-summary">
                 <h3>Mine geder</h3>
-                <p>Du har registreret 0 geder.</p>
+                <p>Du har registreret <span th:text="${petCount}">0</span> geder.</p>
                 <a href="/member/pets" class="btn">Se mine geder</a>
                 <a href="/member/pets/register" class="btn">Registrer ny ged</a>
             </div>
