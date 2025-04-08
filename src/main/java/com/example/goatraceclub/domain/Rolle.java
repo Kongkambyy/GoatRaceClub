@@ -1,4 +1,4 @@
-﻿package com.example.goatraceclub.domain;
+package com.example.goatraceclub.domain;
 
 public enum Rolle {
     MEDLEM,

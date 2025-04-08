@@ -1,4 +1,4 @@
-﻿package com.example.goatraceclub.infrastructure.implementations;
+package com.example.goatraceclub.infrastructure.implementations;
 
 import com.example.goatraceclub.domain.Udstilling;
 import com.example.goatraceclub.infrastructure.interfaces.IUdstillingsRepository;

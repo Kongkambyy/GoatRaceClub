@@ -1,4 +1,4 @@
-﻿package com.example.goatraceclub.domain;
+package com.example.goatraceclub.domain;
 
 import java.util.Date;
 public class Kæledyr {

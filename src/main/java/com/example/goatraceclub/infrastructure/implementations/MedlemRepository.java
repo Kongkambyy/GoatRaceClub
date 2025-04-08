@@ -1,4 +1,4 @@
-﻿package com.example.goatraceclub.infrastructure.implementations;
+package com.example.goatraceclub.infrastructure.implementations;
 
 import com.example.goatraceclub.domain.Kæledyr;
 import com.example.goatraceclub.domain.Medlem;

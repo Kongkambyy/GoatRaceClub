@@ -1,4 +1,4 @@
-﻿package com.example.goatraceclub.infrastructure.interfaces;
+package com.example.goatraceclub.infrastructure.interfaces;
 
 import com.example.goatraceclub.domain.Kæledyr;
 import java.util.List;
