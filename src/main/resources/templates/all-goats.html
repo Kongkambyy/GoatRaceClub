@@ -32,6 +32,21 @@
   <section class="all-goats">
     <h2>Alle Geder i Klubben</h2>
 
+    <!-- Search form -->
+    <div class="search-form">
+      <form action="/member/allgoats/search" method="GET">
+        <div class="form-group search-group">
+          <input type="text" id="searchTerm" name="searchTerm" placeholder="Søg efter navn eller race..." th:value="${searchTerm}" required>
+          <button type="submit" class="btn">Søg</button>
+        </div>
+      </form>
+      <div th:if="${searchTerm != null}" class="search-results-info">
+        <p>Viser resultater for: <strong th:text="${searchTerm}">søgeord</strong>
+          <a href="/member/allgoats" class="reset-search">(Nulstil søgning)</a>
+        </p>
+      </div>
+    </div>
+
     <!-- Vis geder hvis der er nogen -->
     <div th:if="${not #lists.isEmpty(goats)}" class="pets-container">
       <div th:each="goat : ${goats}" class="pet-card">

@@ -23,4 +23,8 @@ public interface IKæledyrService {
     Kæledyr opdaterKæledyr(Kæledyr kæledyr);
 
     void sletKæledyr(Long id);
+    
+    List<Kæledyr> søgKæledyr(String searchTerm);
+    Kæledyr redigerKæledyr(Long id, String goatName, String race, int weight, String birthday);
+    boolean erEjerAfKæledyr(Long kæledyrId, Long medlemId);
 }

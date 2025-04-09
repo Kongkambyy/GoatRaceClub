@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/member")
@@ -176,5 +177,89 @@ public class MemberController {
             model.addAttribute("member", (Medlem) session.getAttribute("currentMember"));
             return "edit-profile";
         }
+    }
+
+    @GetMapping("/pets/edit/{id}")
+    public String showEditPetForm(@PathVariable Long id, HttpSession session, Model model) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Optional<Kæledyr> kæledyrOptional = kæledyrService.getKæledyrById(id);
+            if (kæledyrOptional.isEmpty()) {
+                return "redirect:/member/pets?error=Geden findes ikke";
+            }
+
+            if (!kæledyrService.erEjerAfKæledyr(id, currentMember.getId())) {
+                return "redirect:/member/pets?error=Du har ikke adgang til at redigere denne ged";
+            }
+
+            model.addAttribute("pet", kæledyrOptional.get());
+            return "edit-pet";
+        } catch (Exception e) {
+            return "redirect:/member/pets?error=" + e.getMessage();
+        }
+    }
+
+    @PostMapping("/pets/edit/{id}")
+    public String processEditPet(@PathVariable Long id,
+                                 @RequestParam String goatName,
+                                 @RequestParam String race,
+                                 @RequestParam int weight,
+                                 @RequestParam String birthday,
+                                 HttpSession session,
+                                 Model model) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            if (!kæledyrService.erEjerAfKæledyr(id, currentMember.getId())) {
+                return "redirect:/member/pets?error=Du har ikke adgang til at redigere denne ged";
+            }
+
+            kæledyrService.redigerKæledyr(id, goatName, race, weight, birthday);
+            return "redirect:/member/pets?success=Ged opdateret!";
+        } catch (Exception e) {
+            model.addAttribute("error", "Der opstod en fejl: " + e.getMessage());
+            model.addAttribute("pet", kæledyrService.getKæledyrById(id).orElse(null));
+            return "edit-pet";
+        }
+    }
+
+    @GetMapping("/pets/delete/{id}")
+    public String deletePet(@PathVariable Long id, HttpSession session) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            if (!kæledyrService.erEjerAfKæledyr(id, currentMember.getId())) {
+                return "redirect:/member/pets?error=Du har ikke adgang til at slette denne ged";
+            }
+
+            kæledyrService.sletKæledyr(id);
+            return "redirect:/member/pets?success=Ged slettet!";
+        } catch (Exception e) {
+            return "redirect:/member/pets?error=" + e.getMessage();
+        }
+    }
+
+    @GetMapping("/allgoats/search")
+    public String searchGoats(@RequestParam String searchTerm, HttpSession session, Model model) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        List<Kæledyr> searchResults = kæledyrService.søgKæledyr(searchTerm);
+        model.addAttribute("goats", searchResults);
+        model.addAttribute("searchTerm", searchTerm);
+
+        return "all-goats";
     }
 }
