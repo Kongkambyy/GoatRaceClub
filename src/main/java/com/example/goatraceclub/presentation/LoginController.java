@@ -33,7 +33,6 @@ public class LoginController {
                                Model model,
                                HttpSession session) {
         try {
-            // Anvend forretningslogik fra service laget
             Optional<Medlem> optionalMedlem = medlemService.login(email, password);
 
             if (optionalMedlem.isPresent()) {
@@ -70,7 +69,6 @@ public class LoginController {
                                       @RequestParam String telephone,
                                       Model model) {
         try {
-            // Anvend forretningslogik fra service laget
             medlemService.opretMedlem(name, email, password, address, telephone);
             return "redirect:/login?success=Registration successful";
         } catch (IllegalArgumentException e) {

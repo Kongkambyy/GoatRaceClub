@@ -27,7 +27,6 @@ public class KæledyrService implements IKæledyrService {
 
     @Override
     public Kæledyr opretKæledyr(Long medlemId, String goatName, String race, int weight, String birthday) {
-        // Check if member exists
         Optional<Medlem> medlemOptional = medlemRepository.findById(medlemId);
         if (medlemOptional.isEmpty()) {
             throw new IllegalArgumentException("Medlemmet findes ikke");
@@ -35,10 +34,8 @@ public class KæledyrService implements IKæledyrService {
 
         Medlem medlem = medlemOptional.get();
 
-        // Create pet
         Kæledyr kæledyr = new Kæledyr(medlemId.intValue(), goatName, race, weight, birthday);
 
-        // Save pet and add to member
         kæledyr = kæledyrRepository.save(kæledyr);
         medlem.tilføjKæledyr(kæledyr);
         medlemRepository.save(medlem);
@@ -73,7 +70,6 @@ public class KæledyrService implements IKæledyrService {
         // Hent alle medlemmer
         List<Medlem> medlemmer = medlemRepository.findAll();
 
-        // For hvert medlem, hent deres geder og tilføj til map'et
         for (Medlem medlem : medlemmer) {
             List<Kæledyr> geder = kæledyrRepository.findByMedlemId(medlem.getId());
             if (!geder.isEmpty()) {

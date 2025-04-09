@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min Profil - Gedeklubben</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Header med navigation -->
+<header>
+  <nav>
+    <div class="logo">
+      <h1>Gedeklubben</h1>
+    </div>
+    <div class="nav-links">
+      <a href="/member/dashboard">Hjem</a>
+      <a href="/member/pets">Mine Geder</a>
+      <a href="/member/allgoats">Alle Geder</a>
+      <a href="/member/membergoats">Medlemmers Geder</a>
+      <a href="/exhibitions">Udstillinger</a>
+      <div class="auth-links">
+        <a href="/member/profile" class="active">Min Profil</a>
+        <a href="/logout">Log ud</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Hovedindhold -->
+<main>
+  <section class="profile">
+    <h2>Min Profil</h2>
+
+    <!-- Succesbesked vises hvis der er success parameter -->
+    <div th:if="${param.success}" class="success-message">
+      <p th:text="${param.success}"></p>
+    </div>
+
+    <div class="profile-details">
+      <p><strong>Navn:</strong> <span th:text="${member.name}">Navn</span></p>
+      <p><strong>Email:</strong> <span th:text="${member.email}">email@example.com</span></p>
+      <p><strong>Adresse:</strong> <span th:text="${member.addresse}">Adressevej 123</span></p>
+      <p><strong>Telefon:</strong> <span th:text="${member.telefon}">12345678</span></p>
+      <p><strong>Medlem siden:</strong> <span th:text="${#dates.format(member.indmeldelsesDato, 'dd-MM-yyyy')}">01-01-2025</span></p>
+      <p><strong>Rolle:</strong> <span th:text="${member.rolle}">MEDLEM</span></p>
+
+      <div class="profile-actions">
+        <a href="/member/edit" class="btn">Rediger profil</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="copyright">
+    <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+  </div>
+</footer>
+</body>
+</html>

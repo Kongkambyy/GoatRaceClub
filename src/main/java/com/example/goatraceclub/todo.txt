@@ -1,0 +1,4 @@
+﻿Slet medlemsknap
+Redigere i kæledyr
+Slette et kæledyr
+Søgefunktion

@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rediger Profil - Gedeklubben</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Header med navigation -->
+<header>
+  <nav>
+    <div class="logo">
+      <h1>Gedeklubben</h1>
+    </div>
+    <div class="nav-links">
+      <a href="/member/dashboard">Hjem</a>
+      <a href="/member/pets">Mine Geder</a>
+      <a href="/member/allgoats">Alle Geder</a>
+      <a href="/member/membergoats">Medlemmers Geder</a>
+      <a href="/exhibitions">Udstillinger</a>
+      <div class="auth-links">
+        <a href="/member/profile" class="active">Min Profil</a>
+        <a href="/logout">Log ud</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Hovedindhold -->
+<main>
+  <section class="edit-profile">
+    <h2>Rediger Profil</h2>
+
+    <!-- Fejlbesked vises hvis der er en fejl -->
+    <div th:if="${error}" class="error-message">
+      <p th:text="${error}"></p>
+    </div>
+
+    <form action="/member/edit" method="POST">
+      <div class="form-group">
+        <label for="name">Navn:</label>
+        <input type="text" id="name" name="name" th:value="${member.name}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${member.email}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Adresse:</label>
+        <input type="text" id="address" name="address" th:value="${member.addresse}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="telephone">Telefon:</label>
+        <input type="tel" id="telephone" name="telephone" th:value="${member.telefon}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Nyt kodeord (lad være tomt for at beholde det nuværende):</label>
+        <input type="password" id="password" name="password">
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn">Gem ændringer</button>
+        <a href="/member/profile" class="btn btn-secondary">Annuller</a>
+      </div>
+
+    </form>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="copyright">
+    <p>&copy; 2025 Gedeklubben. Alle rettigheder forbeholdes.</p>
+  </div>
+</footer>
+</body>
+</html>

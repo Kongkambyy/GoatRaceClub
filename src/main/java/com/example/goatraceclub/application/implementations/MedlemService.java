@@ -21,15 +21,12 @@ public class MedlemService implements IMedlemService {
 
     @Override
     public Medlem opretMedlem(String name, String email, String password, String addresse, String telefon) {
-        // Check if member with email already exists
         if (medlemRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("En bruger med denne email findes allerede");
         }
 
-        // Create new member - using password directly without hashing
         Medlem medlem = new Medlem(name, email, password, addresse, telefon);
 
-        // Save and return
         return medlemRepository.save(medlem);
     }
 
@@ -40,7 +37,6 @@ public class MedlemService implements IMedlemService {
         if (medlemOptional.isPresent()) {
             Medlem medlem = medlemOptional.get();
 
-            // Direct password comparison without hashing
             if (medlem.getPassword().equals(password)) {
                 return Optional.of(medlem);
             }

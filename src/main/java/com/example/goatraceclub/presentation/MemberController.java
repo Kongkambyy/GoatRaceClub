@@ -131,4 +131,50 @@ public class MemberController {
 
         return "member-goats";
     }
+
+    @GetMapping("/edit")
+    public String showEditProfileForm(HttpSession session, Model model) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("member", currentMember);
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit")
+    public String processEditProfile(@RequestParam String name,
+                                     @RequestParam String email,
+                                     @RequestParam String address,
+                                     @RequestParam String telephone,
+                                     @RequestParam(required = false) String password,
+                                     HttpSession session,
+                                     Model model) {
+        try {
+            Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+            if (currentMember == null) {
+                return "redirect:/login";
+            }
+
+            currentMember.setName(name);
+            currentMember.setEmail(email);
+            currentMember.setAddresse(address);
+            currentMember.setTelefon(telephone);
+
+            if (password != null && !password.trim().isEmpty()) {
+                currentMember.setPassword(password);
+            }
+
+            Medlem updatedMember = medlemService.opdaterMedlem(currentMember);
+
+            session.setAttribute("currentMember", updatedMember);
+
+            return "redirect:/member/profile?success=Profil opdateret!";
+        } catch (Exception e) {
+            model.addAttribute("error", "Der opstod en fejl ved opdatering af profilen: " + e.getMessage());
+            model.addAttribute("member", (Medlem) session.getAttribute("currentMember"));
+            return "edit-profile";
+        }
+    }
 }
