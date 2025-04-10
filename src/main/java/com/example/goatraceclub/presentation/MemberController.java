@@ -82,6 +82,23 @@ public class MemberController {
         return "register-pet";
     }
 
+    @PostMapping("/delete")
+    public String deleteMember(HttpSession session) {
+        Medlem currentMember = (Medlem) session.getAttribute("currentMember");
+        if (currentMember == null) {
+            return "redirect:/login";
+        }
+
+        // Slet medlem via service laget
+        medlemService.sletMedlem(currentMember.getId());
+
+        // Ryd sessionen, da kontoen ikke længere findes
+        session.invalidate();
+
+        // Omdiriger til login-siden med en succes-besked
+        return "redirect:/login?success=Dit+medlemskab+er+slettet";
+    }
+
     @PostMapping("/pets/register")
     public String registerPet(@RequestParam String goatName,
                               @RequestParam String race,

@@ -2,3 +2,48 @@
 Redigere i kæledyr
 Slette et kæledyr
 Søgefunktion
+
+Query:
+
+CREATE DATABASE goatraceclub;
+USE goatraceclub;
+
+CREATE TABLE members (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    addresse VARCHAR(255),
+    telefon VARCHAR(255),
+    indmeldelsesDato DATE,
+    rolle VARCHAR(50)
+) ENGINE=InnoDB;
+
+CREATE TABLE goats (
+    goatId INT AUTO_INCREMENT PRIMARY KEY,
+    ownerId INT,
+    goatName VARCHAR(255) NOT NULL,
+    race VARCHAR(255),
+    weight INT,
+    birthday DATE,
+    FOREIGN KEY (ownerId) REFERENCES members(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE exhibitions (
+    showId INT AUTO_INCREMENT PRIMARY KEY,
+    showName VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    occasion DATE,
+    cost INT
+) ENGINE=InnoDB;
+
+CREATE TABLE registration (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    showId INT,
+    petId INT,
+    kategori VARCHAR(255),
+    tilmeldingsDato DATE,
+    status BOOLEAN,
+    FOREIGN KEY (showId) REFERENCES exhibitions(showId),
+    FOREIGN KEY (petId) REFERENCES goats(goatId)
+) ENGINE=InnoDB;
